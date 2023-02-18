@@ -4,26 +4,32 @@ import Quiz from "./components/Quiz"
 
 export default function App() {
     const [start, setStart] = React.useState(false)
-    const [request, setRequest] = React.useState(1)
+    const [amount, setAmount] = React.useState(5)
     const [apiData, setApiData] = React.useState([])
 
     React.useEffect(() => {
         async function getApiData() {
             const res = await fetch(
-                "https://opentdb.com/api.php?amount=5&category=9&difficulty=easy&type=multiple"
+                `https://opentdb.com/api.php?amount=${amount}&category=9&difficulty=easy&type=multiple`
             )
             const data = await res.json()
             setApiData(data.results)
         }
         getApiData()
-    }, [request])
+    }, [amount])
 
-    function startQuiz() {
+    function toggleStart() {
         setStart(oldStart => !oldStart)
     }
 
-    function newQuiz() {
-        setRequest(oldRequest => oldRequest + 1)
+    function handleChange(event) {
+        const value = event.target.value
+        if (value < 1)
+            setAmount(1)
+        else if (value > 50)
+            setAmount(50)
+        else
+            setAmount(value)
     }
 
     return (
@@ -32,11 +38,12 @@ export default function App() {
                 start
                     ? <Quiz
                         apiData={apiData}
-                        newQuiz={newQuiz}
                     />
                     : <Intro
                         length={apiData.length}
-                        startQuiz={startQuiz}
+                        toggleStart={toggleStart}
+                        amount={amount}
+                        handleChange={handleChange}
                     />
             }
         </main>

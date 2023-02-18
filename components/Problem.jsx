@@ -16,21 +16,12 @@ export default function Problem(props) {
         }
 
         if (props.check) {
-            if (answer.select) {
+            if (answer.select)
                 styles.backgroundColor = "#F8BCBC"
-            }
-            if (answer.choice === props.correct_answer) {
-                styles.backgroundColor = "#94D7A2"
-            }
-        }
 
-        React.useEffect(() => {
-            if (props.check
-                && answer.select
-                && answer.choice === props.correct_answer) {
-                props.setScore(oldScore => oldScore + 1)
-            }
-        }, [props.check])
+            if (answer.choice === props.correct_answer)
+                styles.backgroundColor = "#94D7A2"
+        }
 
         return (
             <div

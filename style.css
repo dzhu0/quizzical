@@ -60,6 +60,31 @@ hr {
     margin-block: 10px 30px;
 }
 
+.description > span {
+    font-size: 14px;
+}
+
+.amount {
+    width: 40px;
+    background: #4D5B9E;
+    border-radius: 10px;
+    border: none;
+    font-family: 'Inter', sans-serif;
+    text-align: center;
+    font-size: 16px;
+    color: #F5F7FB;
+    padding-block: 5px;
+    margin-inline: 5px;
+}
+
+.amount::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+.amount:focus {
+    outline: none;
+}
+
 .quiz {
     width: 80%;
     min-width: 800px;
@@ -93,7 +118,7 @@ hr {
     margin-top: 30px;
 }
 
-.check {
+.play-again {
     display: flex;
     justify-content: center;
     align-items: center;

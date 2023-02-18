@@ -11,6 +11,18 @@ export default function Quiz(props) {
         setQuiz(makeQuiz())
     }, [props.apiData])
 
+    React.useEffect(() => {
+        if (check)
+            for (let i = 0; i < quiz.length; i++) {
+                const problem = quiz[i]
+                for (let j = 0; j < problem.answers.length; j++) {
+                    const answer = problem.answers[j]
+                    if (answer.select && answer.choice === problem.correct_answer)
+                        setScore(oldScore => oldScore + 1)
+                }
+            }
+    }, [check])
+
     function makeQuiz() {
         return props.apiData.map(data => {
             return {
@@ -59,14 +71,12 @@ export default function Quiz(props) {
         })
     }
 
-    function checkAnswers() {
-        setCheck(true)
+    function toggleCheck() {
+        setCheck(oldCheck => !oldCheck)
     }
 
-    function playAgain() {
-        setCheck(false)
-        setScore(0)
-        props.newQuiz()
+    function refreshPage() {
+        window.location.reload(false);
     }
 
     const problems = quiz.map(problem => {
@@ -79,7 +89,6 @@ export default function Quiz(props) {
                 correct_answer={problem.correct_answer}
                 selectAnswer={selectAnswer}
                 check={check}
-                setScore={setScore}
             />
         )
     })
@@ -89,20 +98,20 @@ export default function Quiz(props) {
             {problems}
             {
                 check
-                    ? <div className="check">
+                    ? <div className="play-again">
                         <p className="score">
                             You scored {score}/{quiz.length} correct answers
                         </p>
                         <button
                             className="play-btn"
-                            onClick={playAgain}
+                            onClick={refreshPage}
                         >
                             Play again
                         </button>
                     </div>
                     : <button
                         className="check-btn"
-                        onClick={checkAnswers}
+                        onClick={toggleCheck}
                     >
                         Check answers
                     </button>
