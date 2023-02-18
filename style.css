@@ -1,0 +1,107 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    background-color: #F5F7FB;
+}
+
+body {
+    background-image:
+        url(./images/blob-blue.png),
+        url(./images/blob-yellow.png);
+    background-position: left bottom, right top;
+    background-repeat: no-repeat, no-repeat;
+    background-size: 25%;
+    font-family: 'Inter', sans-serif;
+    color: #293264;
+    padding: 50px;
+    min-width: fit-content;
+    display: flex;
+}
+
+#root {
+    margin: auto;
+    width: 100%;
+}
+
+h1 {
+    font-family: 'Karla', sans-serif;
+}
+
+button {
+    background: #4D5B9E;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    color: #F5F7FB;
+    padding: 12px 48px;
+    cursor: pointer;
+}
+
+button:active {
+    box-shadow: inset 5px 5px 10px -2.5px rgba(0, 0, 0, 0.5);
+}
+
+hr {
+    border: 1px solid #DBDEF0;
+    margin-block: 30px 20px;
+}
+
+.intro {
+    text-align: center;
+}
+
+.description {
+    margin-block: 10px 30px;
+}
+
+.quiz {
+    width: 80%;
+    min-width: 800px;
+    max-width: fit-content;
+    margin: auto;
+}
+
+.question {
+    font-size: 30px;
+    margin-bottom: 10px;
+}
+
+.choices {
+    display: flex;
+    gap: 15px;
+}
+
+.choice {
+    border: 1px solid #4D5B9E;
+    border-radius: 10px;
+    padding: 5px 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+
+.check-btn {
+    display: flex;
+    margin: auto;
+    margin-top: 30px;
+}
+
+.check {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 30px;
+}
+
+.score {
+    font-weight: 700;
+    font-size: 16px;
+}
