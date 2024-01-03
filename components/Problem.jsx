@@ -1,26 +1,25 @@
 import React from "react"
 
-export default function Problem(props) {
-    function decodeHtml(html) {
-        const txt = document.createElement("textarea");
-        txt.innerHTML = html;
-        return txt.value;
+export default function Problem({ id, question, answers, correct_answer, selectAnswer, check }) {
+    const decodeHtml = html => {
+        const txt = document.createElement("textarea")
+        txt.innerHTML = html
+        return txt.value
     }
 
-    const choices = props.answers.map(answer => {
+    const choices = answers.map(answer => {
         const styles = {
             backgroundColor:
-                answer.select
-                    ? "#D6DBF5"
-                    : "transparent"
+                answer.select ?
+                    "#D6DBF5" :
+                    "transparent"
         }
 
-        if (props.check) {
-            if (answer.select)
-                styles.backgroundColor = "#F8BCBC"
-
-            if (answer.choice === props.correct_answer)
+        if (check) {
+            if (answer.choice === correct_answer)
                 styles.backgroundColor = "#94D7A2"
+            else if (answer.select)
+                styles.backgroundColor = "#F8BCBC"
         }
 
         return (
@@ -28,9 +27,7 @@ export default function Problem(props) {
                 className="choice"
                 key={answer.id}
                 style={styles}
-                onClick={() => (
-                    props.selectAnswer(props.id, answer.id)
-                )}
+                onClick={() => (selectAnswer(id, answer.id))}
             >
                 {decodeHtml(answer.choice)}
             </div>
@@ -40,7 +37,7 @@ export default function Problem(props) {
     return (
         <div className="problem">
             <h1 className="question">
-                {decodeHtml(props.question)}
+                {decodeHtml(question)}
             </h1>
             <div className="choices">
                 {choices}
