@@ -1,29 +1,27 @@
-import React from "react"
-import Intro from "./components/Intro"
-import Quiz from "./components/Quiz"
+import React, { useState, useEffect } from "react"
+import { Intro, Quiz } from "./components"
 
 export default function App() {
-    const [start, setStart] = React.useState(false)
-    const [amount, setAmount] = React.useState(5)
-    const [apiData, setApiData] = React.useState([])
+    const [start, setStart] = useState(false)
+    const [amount, setAmount] = useState(5)
+    const [apiData, setApiData] = useState([])
 
-    React.useEffect(() => {
-        async function getApiData() {
-            const res = await fetch(
-                `https://opentdb.com/api.php?amount=${amount}&category=9&difficulty=easy&type=multiple`
-            )
-            const data = await res.json()
-            setApiData(data.results)
-        }
-        getApiData()
-    }, [amount])
+    useEffect(() => {
+        if (start) getApiData()
+    }, [start])
 
-    function toggleStart() {
-        setStart(oldStart => !oldStart)
+    const getApiData = async () => {
+        const res = await fetch(`https://opentdb.com/api.php?amount=${amount}&category=9&difficulty=easy&type=multiple`)
+        const data = await res.json()
+        setApiData(data.results)
     }
 
-    function handleChange(event) {
-        const value = event.target.value
+    const startQuiz = () => {
+        setStart(true)
+    }
+
+    const handleChange = e => {
+        const value = e.target.value
         if (value < 1)
             setAmount(1)
         else if (value > 50)
@@ -35,15 +33,12 @@ export default function App() {
     return (
         <main>
             {
-                start
-                    ? <Quiz
-                        apiData={apiData}
-                    />
-                    : <Intro
-                        length={apiData.length}
-                        toggleStart={toggleStart}
+                start ?
+                    <Quiz apiData={apiData} /> :
+                    <Intro
                         amount={amount}
                         handleChange={handleChange}
+                        startQuiz={startQuiz}
                     />
             }
         </main>

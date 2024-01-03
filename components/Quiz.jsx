@@ -1,31 +1,29 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import Problem from "./Problem"
 import { nanoid } from "nanoid"
 
-export default function Quiz(props) {
-    const [quiz, setQuiz] = React.useState([])
-    const [score, setScore] = React.useState(0)
-    const [check, setCheck] = React.useState(false)
+export default function Quiz({ apiData }) {
+    const [quiz, setQuiz] = useState([])
+    const [score, setScore] = useState(0)
+    const [check, setCheck] = useState(false)
 
-    React.useEffect(() => {
-        setQuiz(makeQuiz())
-    }, [props.apiData])
+    useEffect(() => {
+        makeQuiz()
+    }, [apiData])
 
-    React.useEffect(() => {
+    useEffect(() => {
         if (check)
-            for (let i = 0; i < quiz.length; i++) {
-                const problem = quiz[i]
-                for (let j = 0; j < problem.answers.length; j++) {
-                    const answer = problem.answers[j]
+            quiz.forEach(problem => {
+                problem.answers.forEach(answer => {
                     if (answer.select && answer.choice === problem.correct_answer)
                         setScore(oldScore => oldScore + 1)
-                }
-            }
+                })
+            })
     }, [check])
 
-    function makeQuiz() {
-        return props.apiData.map(data => {
-            return {
+    const makeQuiz = () => {
+        setQuiz(apiData.map(data => (
+            {
                 id: nanoid(),
                 question: data.question,
                 answers: randomizeAnswers(
@@ -34,59 +32,54 @@ export default function Quiz(props) {
                 ),
                 correct_answer: data.correct_answer
             }
-        })
+        )))
     }
 
-    function randomizeAnswers(insert, answers) {
+    const randomizeAnswers = (insert, answers) => {
         const ranNum = Math.floor(Math.random() * (answers.length + 1))
         answers.splice(ranNum, 0, insert)
 
-        return answers.map(answer => {
-            return {
+        return answers.map(answer => (
+            {
                 id: nanoid(),
                 choice: answer,
                 select: false
             }
-        })
+        ))
     }
 
-    function selectAnswer(problemId, answerId) {
+    const selectAnswer = (problemId, answerId) => {
         if (check) return
 
-        setQuiz(oldQuiz => {
-            return oldQuiz.map(problem => {
-                return {
-                    ...problem,
-                    answers:
-                        problem.id === problemId
-                            ? problem.answers.map(answer => {
-                                return {
-                                    ...answer,
-                                    select: answer.id === answerId
-                                }
-                            })
-                            : problem.answers
-                }
-            })
-        })
+        setQuiz(oldQuiz => (oldQuiz.map(problem => (
+            {
+                ...problem,
+                answers:
+                    problem.id === problemId ?
+                        problem.answers.map(answer => (
+                            {
+                                ...answer,
+                                select: answer.id === answerId
+                            }
+                        )) :
+                        problem.answers
+            }
+        ))))
     }
 
-    function toggleCheck() {
-        setCheck(oldCheck => !oldCheck)
+    const checkAnswers = () => {
+        setCheck(true)
     }
 
-    function refreshPage() {
-        window.location.reload(false);
+    const refreshPage = () => {
+        window.location.reload(false)
     }
 
     const problems = quiz.map(problem => {
         return (
             <Problem
                 key={problem.id}
-                id={problem.id}
-                question={problem.question}
-                answers={problem.answers}
-                correct_answer={problem.correct_answer}
+                {...problem}
                 selectAnswer={selectAnswer}
                 check={check}
             />
@@ -97,8 +90,8 @@ export default function Quiz(props) {
         <div className="quiz">
             {problems}
             {
-                check
-                    ? <div className="play-again">
+                check ?
+                    <div className="play-again">
                         <p className="score">
                             You scored {score}/{quiz.length} correct answers
                         </p>
@@ -108,10 +101,10 @@ export default function Quiz(props) {
                         >
                             Play again
                         </button>
-                    </div>
-                    : <button
+                    </div> :
+                    <button
                         className="check-btn"
-                        onClick={toggleCheck}
+                        onClick={checkAnswers}
                     >
                         Check answers
                     </button>
