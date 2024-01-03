@@ -9,6 +9,7 @@ html {
 }
 
 body {
+    min-height: 100vh;
     background-image:
         url(./images/blob-blue.png),
         url(./images/blob-yellow.png);
